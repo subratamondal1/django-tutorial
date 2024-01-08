@@ -50,3 +50,8 @@ This structure helps in better organization of your code, especially for large p
 ### Run Django Project
 * `python3 manage.py runserver`: starts a lightweight web server on your local machine @ [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
+## Migrations
+* **Migrations** are the Django's way of `automatically` keeping your underlying database schema `up to date` with the changes in your **Model Architecture** (`model.py` file).
+* **Migrations** automatically detects the changes you made in your model file and keeps the database upto date.
+* The `migrate` command is responsible for applying and unapplying migrations. 
+* You can think of migrations as a **version control system** for your database schema.
