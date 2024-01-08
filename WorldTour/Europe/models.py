@@ -8,3 +8,6 @@ class Trip(models.Model):
     destination = models.CharField(max_length=64)
     nights = models.IntegerField()
     price = models.IntegerField()
+
+    def __str__(self):
+        return f"ID {self.id} from {self.origin} to {self.destination} for {self.nights} nights @ {self.price} USD"
