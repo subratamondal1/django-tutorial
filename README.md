@@ -113,6 +113,8 @@ django-admin startproject project_name .
 django-admin startproject instagram .
 ```
 
+**Note** The `.` at the end tells django-admin to use the current directory as the project directory.
+
 When you run the above command inside "instagram" folder, we get:
 
 ```bash
@@ -125,8 +127,6 @@ When you run the above command inside "instagram" folder, we get:
 │   │   └── wsgi.py      # related to deployment
 │   └── manage.py    # wrapper around django-admin
 ```
-
-**Note** The `.` at the end tells django-admin to use the current directory as the project directory.
 
 <h2 align="left">Create Django App</h2>
 
