@@ -107,13 +107,55 @@ Django-admin is a powerful and versatile tool that simplifies the development an
 <h2 align="left">Create Django Project</h2>
 
 ```bash
-django-admin startproject project_name
+django-admin startproject project_name .
 
 # Example
-django-admin startproject instagram
+django-admin startproject instagram .
 ```
 
+When you run the above command inside "instagram" folder, we get:
+
+```bash
+├── instagram
+│   ├── instagram        # core of our application
+│   │   ├── __init__.py  # defines this directory as package
+│   │   ├── asgi.py      # related to deployment
+│   │   ├── settings.py  # define our application settings
+│   │   ├── urls.py      # define the urls of our application
+│   │   └── wsgi.py      # related to deployment
+│   └── manage.py    # wrapper around django-admin
+```
+
+**Note** The `.` at the end tells django-admin to use the current directory as the project directory.
+
 <h2 align="left">Create Django App</h2>
+
+```bash
+python -m django startapp app_name
+
+# Example
+python -m django startapp reels
+```
+
+<h2 align="left">django-admin vs manage.py</h2>
+Both are same, command line utility, but there's a subtle difference. When we run the bellow command separately, we get the same result.
+
+```bash
+1. django-admin
+2. python manage.py
+```
+
+`manage.py` takes in-account of the seetings of the project, whereas, `dajngo-admin` doesn't, that's the reason the following command will throw error:
+
+```bash
+django-admin runserver
+```
+
+whereas, the following command will run:
+
+```bash
+python manage.py runserver
+```
 
 ```bash
 python -m django startapp app_name
