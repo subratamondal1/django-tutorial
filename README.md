@@ -53,5 +53,32 @@ This structure helps in better organization of your code, especially for large p
 ## Migrations
 * **Migrations** are the Django's way of `automatically` keeping your underlying database schema `up to date` with the changes in your **Model Architecture** (`model.py` file).
 * **Migrations** automatically detects the changes you made in your model file and keeps the database upto date.
-* The `migrate` command is responsible for applying and unapplying migrations. 
 * You can think of migrations as a **version control system** for your database schema.
+
+### Generate Migrations Files
+```python
+python3 manage.py makemigrations
+```
+* This `makemigrations` command `creates new migration files` based on the changes you have made to your models. 
+
+### Apply Migrations
+```python
+python3 manage.py migrate
+```
+* This `migrate` command `applies the migrations` to your database.
+
+### Python Interactive Shell
+```python
+python3 manage.py shell
+```
+* The `shell` command in Django is used to open an interactive Python shell with **access to your project’s models and database**.
+
+### Save Model in Database
+```python
+from Europe.models import Trip
+
+# New instance of Trip Model
+trip1 = Trip(origin="Kolkata", destination="Ayodhya", nights=5, price=5000)
+trip1.save() # Save the instance in the database with auto created id
+```
+* In Django, when you create a new instance of a model, you can save it to the database using the `save()` method.
