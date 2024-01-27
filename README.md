@@ -193,12 +193,47 @@ python manage.py startapp reels
 
 <h2 align="left">Django Views</h2>
 
+The views function is responsible for the logic, or the business rules, of the application. It takes a request from the user and returns a response, usually a web page rendered with a template.
+
 - We know that **HTTP** is a **Request-Response** Protocol. So, every data exchange involves Request-Response. This is where we use views in Django.
 
-In the `views.py` module of our app we define our `views` (action) or `view funtion` that takes in `Request` and returns `Response`, hence called **Request Handler**. We can define any functions inside our views module, such as:
+In the `views.py` module of our app we define our `views` (action) or `view funtion` that takes in `Request` and returns `Response`, hence called **Request Handler**. We can define our view functions to:
 
-- to pull data from db.
-- to transform data.
-- to send emails
+- pull data from db.
+- transform data.
+- send emails
 
 **Note:** we need to map our view in the `urls.py` module so whenever the url is used the user gets the result retuned by the views.
+
+<h2 align="left">Map URLS to Views</h2>
+
+First create `urls.py` module inside your project-app, it should look like this:
+
+```python
+"""Map Urls to the View Functions"""
+from django.urls import path
+from . import views
+
+# URL Configuration
+urlpatterns = [
+    path('hello/', views.say_hello) # new url
+]
+```
+
+Then modify the `urls.py` module of the project, it should be something like this:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('playground/', include('playground.urls')) # new url
+]
+```
+
+The final url would be `.../playground/hello/`
+
+<h2 align="left">Rendering Template</h2>
+
+Although we can render template using DTL - Django Template Language but we use Django mostly to built API that sent data and not HTML.

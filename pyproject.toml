@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "django-tutorial"
+name = "learn-django"
 version = "0.1.0"
 description = ""
 authors = ["Subrata Mondal <subratasubha2@gmail.com>"]
@@ -8,7 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^5.0.1"
-arxiv = "^2.1.0"
 
 
 [build-system]
