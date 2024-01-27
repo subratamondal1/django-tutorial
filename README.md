@@ -30,7 +30,7 @@ Every web app has two main parts (apps) - Frontend & Backend.
 
 - **URL - Uniform Resource Locator** is a way to locate resources on the internet. Resources can be a web page, image, audio, video, pdf and others.
 
-- **HTTP - Hypertext Transfer Protocol** defines how a client and a server can communicate with each other on the internet.
+- **HTTP - Hypertext Transfer Protocol** is a Request-Response protocol, it defines how a client and a server can communicate with each other on the internet.
 
 - **API - Application Programming Interface** Server is a gateway to the data for the Client, the Server provides an API through which the Client interacts with the Server.
 
@@ -83,10 +83,7 @@ The benefits of the 3-Tier Architecture are:
 
 - **Reusability:** The architecture allows each layer to be reused across different applications. For example, the application tier can provide APIs for multiple presentation tiers, or the data tier can serve multiple application tiers.
 
-<h2 align="left">Django Project vs Django App</h2>
-
-- In short django project is the entire web app, e.g Instagram.
-- And django app exists inside the django project, they are sub modules that represents multiple features of the web app, e.g Instagram Posts, Status, Story, Reels, etc.
+<h1 align="left">Fundamentals</h1>
 
 <h2 align="left">Django-admin</h2>
 
@@ -128,6 +125,11 @@ When you run the above command inside "instagram" folder, we get:
 │   └── manage.py    # wrapper around django-admin
 ```
 
+<h2 align="left">Django Project vs Django App</h2>
+
+- Django project is the entire web app, e.g Instagram.
+- Django apps are sub modules inside the django project that represents multiple features of the web app, e.g Instagram Posts, Status, Story, Reels, etc.
+
 <h2 align="left">Create Django App</h2>
 
 ```bash
@@ -138,28 +140,65 @@ python -m django startapp reels
 ```
 
 <h2 align="left">django-admin vs manage.py</h2>
-Both are same, command line utility, but there's a subtle difference. When we run the bellow command separately, we get the same result.
+
+Both are **command line utility**. When we run the bellow command separately, we get the same result.
 
 ```bash
 1. django-admin
 2. python manage.py
 ```
 
-`manage.py` takes in-account of the seetings of the project, whereas, `dajngo-admin` doesn't, that's the reason the following command will throw error:
+- But there's a subtle difference the django-admin and manage.py.
+
+`manage.py` takes in-account of the settings of the project, whereas, `dajngo-admin` doesn't, that's the reason the following command will throw error:
 
 ```bash
 django-admin runserver
 ```
 
-whereas, the following command will run:
+whereas, the following command will run successfully:
 
 ```bash
 python manage.py runserver
 ```
 
 ```bash
-python -m django startapp app_name
+python manage.py startapp app_name
 
 # Example
-python -m django startapp reels
+python manage.py startapp reels
 ```
+
+```bash
+.
+├── instagram
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+└── reels
+    ├── __init__.py
+    ├── admin.py   # Here we configure our admin interface of the app
+    ├── apps.py    # Here we configure our app
+    ├── migrations # For generating database tables of our app
+    │   └── __init__.py
+    ├── models.py  # Here we define model classes for our app, model classes pull out data from the database and present to the user
+    ├── tests.py # Here we write our unittest for our app
+    └── views.py # It's a Request Handler and not related to html, template or frontend
+```
+
+**Note:** everytime you create an app, you need to define it in the `settings.py` of the django-project in the `INSTALLED_APPS` variable list.
+
+<h2 align="left">Django Views</h2>
+
+- We know that **HTTP** is a **Request-Response** Protocol. So, every data exchange involves Request-Response. This is where we use views in Django.
+
+In the `views.py` module of our app we define our `views` (action) or `view funtion` that takes in `Request` and returns `Response`, hence called **Request Handler**. We can define any functions inside our views module, such as:
+
+- to pull data from db.
+- to transform data.
+- to send emails
+
+**Note:** we need to map our view in the `urls.py` module so whenever the url is used the user gets the result retuned by the views.
