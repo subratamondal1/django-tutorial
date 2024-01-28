@@ -281,3 +281,210 @@ class Product(models.Model):
 * After migrations this class model, in our database: class **Product** becomes the **Table name** and all the **attributes** become the **Column name** and the arguments as **Column Constraints**.
 
 <h2 align="left">Django Choice Fields</h2>
+
+Choice Fields in Django are a way of defining a list of available options for a model field or a form field. They are useful for fields that have a limited set of valid values, such as gender, status, category, etc. They are also helpful for displaying human-readable names for the values, instead of using the raw values in the database or the user interface.
+
+To use Choice Fields in Django, you need to provide a mapping or an iterable of two-item tuples, where the first item is the actual value to be stored in the database, and the second item is the human-readable name to be displayed. For example:
+
+```python
+GENDER_CHOICES = (
+    ("M", "Male"),
+    ("F", "Female"),
+    ("O", "Other"),
+)
+
+gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+```
+
+This will create a model field called gender, which can only store one of the three values: "M", "F", or "O". It will also use a select box as the default form widget, with the options "Male", "Female", and "Other" for the user to choose from.
+
+You can also use variables or constants to define the choices, instead of hard-coding the values. This can help you avoid errors and improve readability. For example:
+
+```python
+MALE = "M"
+FEMALE = "F"
+OTHER = "O"
+
+GENDER_CHOICES = (
+    (MALE, "Male"),
+    (FEMALE, "Female"),
+    (OTHER, "Other"),
+)
+
+gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+```
+
+This will have the same effect as the previous example, but it will allow you to use the variables MALE, FEMALE, and OTHER in your code, instead of the strings "M", "F", and "O".
+
+<h2 align="left">Django One to One Realtionship between Model Classes</h2>
+
+A Django `OneToOneField` is a field type that creates a one-to-one relationship between two models. A one-to-one relationship means that each record in one model is linked to exactly one record in another model. For example, each user has one profile and each profile belongs to one user.
+
+To use a OneToOneField, you need to specify the `name` of the related model and the `on_delete` option, which defines what happens when the related record is deleted. For example:
+
+```python
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=50)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField()
+```
+
+In this example, the Profile model has a user field that references the User model using a OneToOneField. The `on_delete=models.CASCADE` option means that if a User object is deleted, the Profile object associated with it will also be deleted automatically.
+
+You can access the related object using the dot notation. For example, you can get the user's name from the profile object like this:
+
+```python
+profile = Profile.objects.get(id=1)
+user_name = profile.user.name
+```
+
+You can also access the profile object from the user object using the lowercased model name. For example, you can get the user's bio from the user object like this:
+
+```python
+user = User.objects.get(id=1)
+user_bio = user.profile.bio
+```
+
+<h2 align="left">Django One to Many Realtionship between Model Classes</h2>
+
+A one to many relationship is a type of database relationship where one record in a table can be associated with multiple records in another table. For example, in an ecommerce store, one product can have many reviews, and one review belongs to one product. So the relationship between products and reviews is a one to many relationship.
+
+To create a one to many relationship in Django, you use the `ForeignKey` class from `django.db.models`. You need to specify the name of the related model and the `on_delete` option, which defines what happens when the related record is deleted. For example:
+
+```python
+from django.db import models
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField()
+```
+
+In this example, the Review model has a product field that references the Product model using a foreign key. The on_delete=models.CASCADE option means that if a Product object is deleted, all the Review objects related to it will also be deleted automatically.
+
+You can access the related objects using the dot notation. For example, you can get the product's name from the review object like this:
+
+```python
+review = Review.objects.get(id=1)
+product_name = review.product.name
+```
+
+You can also access the reverse relationship using the lowercased model name followed by \_set. For example, you can get all the reviews for a product object like this:
+
+```python
+product = Product.objects.get(id=1)
+reviews = product.review_set.all()
+```
+
+<h2 align="left">Django Many to Many Realtionship between Model Classes</h2>
+
+A many to many relationship is a type of database relationship where multiple records in one table can be associated with multiple records in another table. For example, in an ecommerce store, one product can belong to multiple categories, and one category can have multiple products. So the relationship between products and categories is a many to many relationship.
+
+To create a many to many relationship in Django, you use the ManyToManyField class from django.db.models. You need to specify the name of the related model and optionally the through option, which defines the intermediate table that stores the association data. For example:
+
+```python
+from django.db import models
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    categories = models.ManyToManyField('Category', through='ProductCategory')
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+class ProductCategory(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+```
+
+In this example, the Product model has a categories field that references the Category model using a many to many field. The through option specifies the ProductCategory model as the intermediate table that stores the product and category ids. This allows us to add extra fields to the association, such as a timestamp or a rank.
+
+You can access the related objects using the dot notation. For example, you can get the product's categories from the product object like this:
+
+```python
+product = Product.objects.get(id=1)
+categories = product.categories.all()
+```
+
+You can also access the reverse relationship using the lowercased model name followed by \_set. For example, you can get all the products for a category object like this:
+
+```python
+category = Category.objects.get(id=1)
+products = category.product_set.all()
+```
+
+<h2 align="left">Resolve Circular Realtionship between Model Classes</h2>
+
+A circular relationship in Django is a situation where two models depend on each other, creating a circular import error. For example, if model A has a foreign key to model B, and model B has a foreign key to model A, then importing either model will cause an error.
+
+To resolve a circular relationship in Django, you can use a string-based specification of the related model, instead of importing it directly. This way, Django will defer the resolution of the model until it is needed, avoiding the circular import error. For example, instead of writing:
+
+```python
+from app.models import B
+
+class A(models.Model):
+    b = models.ForeignKey(B, on_delete=models.CASCADE)
+```
+
+You can write:
+
+```python
+class A(models.Model):
+    b = models.ForeignKey('app.B', on_delete=models.CASCADE)
+```
+
+This will tell Django to look for the model B in the app module, without importing it at the time of definition.
+
+<h2 align="left">Django Generic Realtionship between Model Classes</h2>
+
+A Django Generic relationship is a way of creating a flexible relationship between a model(app) and any other model(app) in the database, without knowing the exact type of the related model in advance. This is useful for scenarios where you want to associate a model with different kinds of objects, such as comments, tags, ratings, etc.
+
+To create a Generic relationship in Django, you use the `GenericForeignKey` class from `django.contrib.contenttypes.fields`. You also need to add two fields to your model: `content_type` and `object_id`, which store the type and the id of the related object, respectively. For example:
+
+```python
+from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
+class Comment(models.Model):
+    content = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+```
+
+In this example, the Comment model has a content_object field that references any other model using a generic foreign key. The content_type field stores the type of the related model, such as Product, Category, or User. The object_id field stores the id of the related object, such as 1, 2, or 3.
+
+You can access the related object using the dot notation. For example, you can get the content of the comment object like this:
+
+```python
+comment = Comment.objects.get(id=1)
+comment_content = comment.content
+```
+
+You can also access the reverse relationship using the GenericRelation class from `django.contrib.contenttypes.fields`. This allows you to query the related objects from the other model. For example, you can add a comments field to the Product model like this:
+
+```python
+from django.contrib.contenttypes.fields import GenericRelation
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    comments = GenericRelation(Comment)
+```
+
+This will allow you to get all the comments for a product object like this:
+
+```python
+product = Product.objects.get(id=1)
+comments = product.comments.all()
+```
