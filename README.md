@@ -237,3 +237,47 @@ The final url would be `.../playground/hello/`
 <h2 align="left">Rendering Template</h2>
 
 Although we can render template using DTL - Django Template Language but we use Django mostly to built API that sent data and not HTML.
+
+<h2 align="left">Data Model</h2>
+
+A data model in Django is a way of defining the structure and behavior of the data that you want to store in a database. A data model is represented by a `Python class` that inherits from `django.db.models.Model`. Each attribute of the class corresponds to a field in the database table, and each instance of the class represents a row in the table.
+
+- **Models** are used to **store** and **retrieve** data.
+- Each **django-project** has multiple apps that represents different functionalities and each of those apps has their own Data Model.
+
+* Make sure that each app is **self-contained** i.e they are not dependend on others.
+
+* A good design is one with **minimal coupling (dependency)** and
+  **high cohesion (focus)**.
+
+<h2 align="left">Django Model Field types</h2>
+
+- Django model field types are the classes that define the structure and behavior of the data that you want to store in a database using Django.
+
+- Each field type corresponds to a column type in the database, and each attribute of the field class represents an option or constraint for the column.
+
+- For example, a CharField is a field type that stores text-based values, and it has attributes like max_length, blank, and choices that affect how the text is stored and validated.
+
+* There are many field types available in Django, such as **IntegerField, BooleanField, DateField, ForeignKey**, and **FileField**.
+
+* Each field type has its own set of arguments, methods, and properties that you can use to customize its functionality.
+
+* You can also create your own custom field types by subclassing the Field class or any of its subclasses.
+
+```python
+from django.db import models
+
+# Create your models here.
+class Product(models.Model):
+    title=models.CharField(max_length=255)
+    description=models.TextField()
+    price=models.DecimalField(max_digits=6, decimal_places=2)
+    inventory=models.IntegerField()
+    last_update=models.DateTimeField(auto_now=True)
+```
+
+- **Note:** By default Django creates an **Id Key** that acts as **Primary Key** for each Data Model Class until and unless you create an attribute in the Data Model Class with argument `primary_key=True`.
+
+* After migrations this class model, in our database: class **Product** becomes the **Table name** and all the **attributes** become the **Column name** and the arguments as **Column Constraints**.
+
+<h2 align="left">Django Choice Fields</h2>
